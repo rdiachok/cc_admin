@@ -155,7 +155,7 @@ if ($_SESSION['admin'] != "admin") {
 
 
         <div class=" info">
-            <p>hi</p>
+
         </div>
     </div>
 
