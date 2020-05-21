@@ -99,25 +99,30 @@ if ($_SESSION['admin'] != "admin") {
 
                 <form method="post" action="index.php">
                     <div class="form-row">
-                        <div class="col-auto">
+                        <div class="col-5">
 
                             <label for="example">Номер ЕН</label>
                             <input class="form-control" name="form_id_en" type="text" placeholder="вкажіть номер ЕН">
                         </div>
-                        <div class="col-auto">
+                        <div class="col-5">
 
                             <label for="example">Номер обладнання</label>
                             <input class="form-control" name="form_id_dslam" type="text"
                                 placeholder="вкажіть номер обладнання">
                         </div>
-                        <div class="col-auto">
-                            <label for="exampleInputEmail1">Вкажіть дату завершення АВР\РНР</label>
-                            <input type="date" class="form-control" name="form_date_e" id="exampleInputDate"
-                                aria-describedby="Дата початку АВР\РНР" placeholder="Вкажіть дату завершення АВР\РНР">
 
+                        <div class="col-5">
+                            <label for="example">Дату закриття АВР</label>
+
+                            <input class="form-control" name="form_date_e" type="date">
+                        </div>
+                        <div class="col-5">
+                            <label for="example">Час закриття АВР</label>
+
+                            <input class="form-control" name="form_time_e" type="text">
                         </div>
 
-                        <div class="col-auto">
+                        <div class="col-10">
                             <label for="exampleInputEmail1">Вкажіть рекомендації</label>
                             <input type="text" class="form-control" name="form_recom" id="exampleInputDate"
                                 aria-describedby="Дата завершення АВР\РНР" placeholder="Вкажіть рекомендації">

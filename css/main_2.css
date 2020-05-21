@@ -24,14 +24,14 @@ body{
 .boxtwo{
   margin-top: 65px;
   margin-left: 65px;
-  width: 300px; 
+  width: 500px; 
   padding: 5px;
   float: left;
 
 }
 .form-row{
-  width: 300px;  
-  height: 420px;
+  width: 500px;  
+  height: 300px;
   margin: 5px;
 }
 
