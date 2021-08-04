@@ -6,14 +6,29 @@ if ($_GET['do'] == 'logout') {
     unset($_SESSION['email']);
     session_destroy();
 }
-if ($_GET['do'] == 'newPost') {
-    header("Location: newPost.php");
-}
-if (!$_SESSION['email']) {
-    header("Location: login.php");
-    exit;
-}
 
+
+
+if ($_POST['submit']) {
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $dt = DATE('Y-m-d H:i:s');
+    $name =  $_SESSION['user'];
+    $conn = new mysqli("localhost", "root", "root", "mysql");
+    if ($conn->connect_error) {
+        die("Ошибка: " . $conn->connect_error);
+    }
+    $sql = "INSERT INTO POSTS VALUES('$title', '$content', '$name', '$dt')";
+    if ($conn->query($sql)) {
+        header("Location: index.php");
+        exit;
+    } else {
+        /* print("<script>
+window.alert('Name or password is incorrect!');
+</script>");*/
+        echo $title . $content;
+    }
+}
 ?>
 
 
@@ -71,12 +86,7 @@ if (!$_SESSION['email']) {
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="newPost.php?do=newPost">
-                            <?php
-                            if ($_SESSION['user'] == 'admin') {
-                                echo 'Add post';
-                            }
-                            ?></a>
+                        <a class="nav-link" href="newPost.php?do=newPost">Add post</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?do=logout">logout</a>
@@ -87,31 +97,29 @@ if (!$_SESSION['email']) {
         </div>
 
     </div>
-    <div class="posts">
-        <?php
-        $conn = new mysqli("localhost", "root", "root", "mysql");
-        if ($conn->connect_error) {
-            die("Ошибка: " . $conn->connect_error);
-        }
+    <div class="posts_add">
+        <form method="post" class="login100-form validate-form">
+            <span class="login100-form-title">
+                Add New Post
+            </span>
+            <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="title" placeholder="title"
+                    rows="2" required></textarea>
+            </div>
 
-        $sql = "SELECT * FROM posts";
-        if ($result = $conn->query($sql)) {
+            <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="content" placeholder="content"
+                    rows="6" required></textarea>
+            </div>
+
+            <div class="container-login100-form-btn">
+                <input class="btn btn-primary" type="submit" name="submit" value="Submit" />
+            </div>
 
 
-            foreach ($result as $row) {
-                echo "<c1>" . $row["title"] . "</c1>" . "<br />";
-                echo "<c>" . $row["content"] . "</c>" . "<br />";
-                echo "<c>" . $row["createdAt"] . "</c>" .  ' ' . $row["datePublished"] . "<br />";
-                echo "<br />";
-            }
 
-            $result->free();
-        } else {
-            echo "Ошибка: " . $conn->error;
-        }
-        $conn->close();
-        ?>
 
+        </form>
 
     </div>
 </body>

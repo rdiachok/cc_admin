@@ -1,32 +1,26 @@
 <?php
+
+
 session_start();
 
-//conncet to DB on local machine
 $conn = new mysqli("localhost", "root", "root", "mysql");
 if ($conn->connect_error) {
     die("Ошибка: " . $conn->connect_error);
 }
-//if user click on button submit we get some info from form
+
 if ($_POST['submit']) {
+    $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['pass'];
-    //check input info in oure db
-    $sql = "SELECT * FROM users WHERE email = '$email' AND PASSWORD = '$password'";
-    $result = $conn->query($sql);
-    //if we get info from db we will be redirected user to the next page
-    if ($result->num_rows == '1') {
-        foreach ($result as $row) {
-            $row["firstName"];
-        }
-        //we gives info to redirected page
-        $_SESSION['email'] = $email;
-        $_SESSION['user'] =  $row["firstName"];
-        $_SESSION['dt_come'] =  DATE('H:i:s');
+
+    $sql = "INSERT INTO USERS VALUES('$name', '$email', '$password')";
+    if ($conn->query($sql)) {
+        $_SESSION['okey'] = 'You can avtorization on site';
         header("Location: index.php");
         exit;
     } else {
         print("<script>
-window.alert('Login or password is incorrect!');
+window.alert('Name or password is incorrect!');
 </script>");
     }
 }
@@ -82,9 +76,14 @@ window.alert('Login or password is incorrect!');
 
                 <form method="post" class="login100-form validate-form">
                     <span class="login100-form-title">
-                        Authorization
+                        Registration Form
                     </span>
 
+                    <div class="wrap-input100 validate-input" data-validate="Valid first name is required: name">
+                        <input class="ninput100" type="text" name="name" placeholder="name" required>
+                        <span class="focus-input100"></span>
+
+                    </div>
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
                         <input class="ninput100" type="text" name="email" placeholder="email" required>
                         <span class="focus-input100"></span>
@@ -100,14 +99,7 @@ window.alert('Login or password is incorrect!');
                         <input class="btn btn-primary" type="submit" name="submit" value="Submit" />
                     </div>
 
-                    <div class="text-center p-t-12">
-                        <span class="txt1">
-                            Do you want
-                        </span>
-                        <a class="txt2" href="registration.php">
-                            Registration?
-                        </a>
-                    </div>
+
 
 
                 </form>

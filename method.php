@@ -1,0 +1,79 @@
+<?php
+
+$this->getLogger()->info("marcomSmartFinderInternet_v2: $ani");
+
+//all variables
+$session = 'unk';
+$tree_id = 'marcom008';
+$num = 0;
+$phone = 0;
+$service_phone_or_orax = 'unk|0';
+$id_phone_orax = 'unk';
+$phone_orax = '0';
+$internet = '0';
+
+//we check the phone. Is phone stacionare?
+if (strlen($ani) == 10) {
+    $code = substr($ani, 1, 2);
+    if (in_array($code, array(41, 43, 57, 54, 53, 56, 61, 52, 48, 51, 55, 44, 45, 43, 47, 46, 32, 36, 34, 37, 31, 35, 33, 38, 62, 64))) {
+        //so oure phone is stacionare. After check we finde OR
+        $num = $this->smartFinderInfoForPhone($ani, $session, $tree_id);
+        //next step. its check geting OR
+        if (strlen($num) == 16) {
+            //we would find internet in new US method by OR
+            $internet = $this->is_active_internet_v1($num);
+            $internet = $this->intStatusFromCP;
+            //will ruturn 0 or 1 or 4
+            $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+            return $internet;
+        } else {
+            //will ruturn 0
+            $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+            return $internet;
+        }
+    } else {
+        //so oure phone is mobile and we will finde stacionare number or orax by the next method
+        $service_phone_or_orax = $this->get_orax_phone_by_mobile_v2($ani);
+        //parsing of getting info	
+        $getString = explode("|", $service_phone_or_orax);
+        $id_phone_orax = $getString[0]; //1 - phone, 2 - orax 
+        $phone_orax =  $getString[1];
+
+        if ($id_phone_orax == '1') {
+            //so oure phone is stacionare. After check we finde OR
+            $num = $this->smartFinderInfoForPhone($phone_orax, $session, $tree_id);
+            //next step. its check geting OR
+            if (strlen($num) == 16) {
+                //we would find internet in new US method by OR
+                $internet = $this->is_active_internet_v1($num);
+                $internet = $this->intStatusFromCP;
+                //will ruturn 0 or 1 or 4
+                $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+                return $internet;
+            } else {
+                //will ruturn 0
+                $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+                return $internet;
+            }
+        } else if ($id_phone_orax == '2') {
+            if (strlen($phone_orax) == 16) {
+                //we would find internet in new US method by OR
+                $internet = $this->is_active_internet_v1($phone_orax);
+                $internet = $this->intStatusFromCP;
+                //will ruturn 0 or 1 or 4
+                $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+                return $internet;
+            } else {
+                //will ruturn 0
+                $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+                return $internet;
+            }
+        } else {
+            //will ruturn 0
+            $this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+            return $internet;
+        }
+    }
+}
+$this->getLogger()->info("marcomSmartFinderInternet_v2: $ani, $internet");
+return $internet;
